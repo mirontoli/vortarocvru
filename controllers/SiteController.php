@@ -70,34 +70,35 @@ class SiteController extends Controller
 
         $result = [];
         $str = '';
-        $lang= 1;
+        if(Yii::$app->request->get('lang')) {
+            $lang = Yii::$app->request->get('lang');
+        } else {
+            $lang = 1;
+        }
+        if(Yii::$app->request->get('term')) {
+            $str = Yii::$app->request->get('term');
+            $lang = Yii::$app->request->get('lang');
 
-        if(Yii::$app->request->post()) {
-            if(Yii::$app->request->post('SearchForm')['term'] && Yii::$app->request->post('SearchForm')['lang']) {
-                $str = Yii::$app->request->post('SearchForm')['term'];
-                $lang = Yii::$app->request->post('SearchForm')['lang'];
-
-                $result = (new \yii\db\Query())
-                ->select('c.id as fid, c.term as fterm, r.id as lid, r.term as lterm')
-                /*
-                    switch(Yii::$app->request->post('SearchForm')['lang']) {
-                        case 1: $result = $result->select('c.id as fid, c.term as fterm, r.id as lid, r.term as lterm'); break;
-                        case 2: $result = $result->select('c.id as lid, c.term as lterm, r.id as fid, r.term as fterm'); break;
-                        default: $result = $result->select('c.id as fid, c.term as fterm, r.id as lid, r.term as lterm'); break;
-                    }
-                */
-                ->addSelect(['transcription' => 't.value', 'examples' => 'c2r.examples'])
-                ->from('chv2ru c2r')
-                ->innerjoin('chuvash c', 'c.id=c2r.chv_id')
-                ->innerjoin('russian r', 'r.id=c2r.rus_id')
-                ->innerjoin('transcription t', 't.chv_id=c.id');
-                    switch(Yii::$app->request->post('SearchForm')['lang']) {
-                        case 1: $result = $result->where(['like', 'c.term', Yii::$app->request->post('SearchForm')['term']]); break;
-                        case 2: $result = $result->where(['like', 'r.term', Yii::$app->request->post('SearchForm')['term']]); break;
-                        default: $result = $result->where(['like', 'c.term', Yii::$app->request->post('SearchForm')['term']]); break;
-                    }
-                $result = $result->all();
-            }
+            $result = (new \yii\db\Query())
+            ->select('c.id as fid, c.term as fterm, r.id as lid, r.term as lterm')
+            /*
+                switch(Yii::$app->request->post('SearchForm')['lang']) {
+                    case 1: $result = $result->select('c.id as fid, c.term as fterm, r.id as lid, r.term as lterm'); break;
+                    case 2: $result = $result->select('c.id as lid, c.term as lterm, r.id as fid, r.term as fterm'); break;
+                    default: $result = $result->select('c.id as fid, c.term as fterm, r.id as lid, r.term as lterm'); break;
+                }
+            */
+            ->addSelect(['transcription' => 't.value', 'examples' => 'c2r.examples'])
+            ->from('chv2ru c2r')
+            ->innerjoin('chuvash c', 'c.id=c2r.chv_id')
+            ->innerjoin('russian r', 'r.id=c2r.rus_id')
+            ->innerjoin('transcription t', 't.chv_id=c.id');
+                switch(Yii::$app->request->get('lang')) {
+                    case 1: $result = $result->where(['like', 'c.term', Yii::$app->request->get('term')]); break;
+                    case 2: $result = $result->where(['like', 'r.term', Yii::$app->request->get('term')]); break;
+                    default: $result = $result->where(['like', 'c.term', Yii::$app->request->get('term')]); break;
+                }
+            $result = $result->all();
         }
 
         return $this->render('index', [
@@ -195,7 +196,7 @@ class SiteController extends Controller
                 $transcription->chv_id = $chuvash->id;
                 $transcription->save();
 
-                return $this->goHome();
+                return $this->redirect(['index', 'term' => $chuvash->term]);
 
             }
 
@@ -231,7 +232,7 @@ class SiteController extends Controller
                     $trn->save();
                 }
 
-                return $this->goHome();
+                return $this->redirect(['index', 'term' => $chuvash->term]);
             }
 
         }

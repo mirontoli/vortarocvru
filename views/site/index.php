@@ -21,14 +21,16 @@ $this->registerJs($script, yii\web\View::POS_READY);
         <div class="row">
             <div class="col-lg-2"></div>
                 <?php $form = ActiveForm::begin([
-                    'id' => 'search-form', 
+                    'id' => 'search-form',
+                    'method' => 'get',
+                    'action' => 'index.php',
                     'options' => [
                        /* 'class' => 'form-inline' */
                         ]
                     ]); ?>
             <div class="col-lg-2">
                  <div class="form-group">
-                        <select id="searchform-lang" name="SearchForm[lang]" class="form-control input-sm">
+                        <select id="searchform-lang" name="lang" class="form-control input-sm">
                             <option value="1"<?php echo ($lang == 1) ? 'selected' : ''?>>чув-&gt;рус</option>
                             <option value="2"<?php echo ($lang == 2) ? 'selected' : ''?>>рус-&gt;чув</option>
                         </select>
@@ -42,9 +44,9 @@ $this->registerJs($script, yii\web\View::POS_READY);
             </div>
             <div class="col-lg-6">
                 <div class="input-group">
-                    <input type="text" id="searchform-term" name="SearchForm[term]" class="form-control input-lg" placeholder="Что искать..." value="<?php echo $str ? $str : ''; ?>" autofocus>
+                    <input type="text" id="searchform-term" name="term" class="form-control input-lg" placeholder="Что искать..." value="<?php echo $str ? $str : ''; ?>" autofocus>
                     <span class="input-group-btn">
-                        <button class="btn btn-default btn-lg" name="search-button" type="submit">
+                        <button class="btn btn-default btn-lg" type="submit">
                             <span class="glyphicon glyphicon-search"></span>
                         </button>
                     </span>
