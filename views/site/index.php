@@ -7,6 +7,7 @@ $this->title = 'Словарик';
 
 $langs = ['chv->ru', 'ru->chv'];
 $script = <<< JS
+$('#searchform-term').ime();
 $('#chuvkeys').on( 'click', 'button', function(){
     var result = $('#searchform-term').val() + $(this).text();
     $('#searchform-term').val(result);
@@ -49,8 +50,9 @@ $this->registerJs($script, yii\web\View::POS_READY);
                         <button class="btn btn-default btn-lg" type="submit">
                             <span class="glyphicon glyphicon-search"></span>
                         </button>
-                    </span>
-                </div>               
+                    </span>                    
+                </div>
+                <p class="help-block help-block-error">ă = 8, ĕ = 7, ç = 3, ÿ = 5.</p>
             </div>
             <?php ActiveForm::end(); ?>
             <div class="col-lg-2"></div>

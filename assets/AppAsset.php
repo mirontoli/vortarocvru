@@ -19,8 +19,13 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
+        'css/jquery.ime.css',
     ];
     public $js = [
+        'js/jquery.ime.js',
+        'js//jquery.ime.selector.js',
+        'js/jquery.ime.preferences.js',
+        'js/jquery.ime.inputmethods.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
